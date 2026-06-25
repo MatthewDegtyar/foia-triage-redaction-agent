@@ -288,3 +288,7 @@ in ~2s (54 docs/s).
 **Docs:** [Architecture](docs/ARCHITECTURE.md) · [Design decisions](docs/DESIGN_DECISIONS.md)
 (ADR log, DD-001…018) · [Runbook](docs/RUNBOOK.md) (add a terrain, promote/rollback, feedback &
 memory).
+
+## License
+
+[MIT](LICENSE) — free to use, modify, and distribute.
