@@ -1,0 +1,29 @@
+{
+  "_note": "must_redact = private-individual PII; a MISS here is an unlawful disclosure (the safety-critical failure). overflag_ok = official government contact info the detector will flag but an officer/policy correctly dismisses — over-catching is by design.",
+  "must_redact": [
+    {"doc": "email-001.txt", "text": "123-45-6789", "exemption": "b6", "kind": "ssn"},
+    {"doc": "email-001.txt", "text": "555-0142", "exemption": "b6", "kind": "phone"},
+    {"doc": "email-001.txt", "text": "marcus.reedy@example.com", "exemption": "b6", "kind": "email"},
+    {"doc": "email-001.txt", "text": "4821 Limestone Ridge Road", "exemption": "b6", "kind": "address"},
+    {"doc": "email-001.txt", "text": "04/17/1979", "exemption": "b6", "kind": "dob"},
+    {"doc": "memo-002.txt", "text": "4471882", "exemption": "b4", "kind": "account"},
+    {"doc": "letter-004.txt", "text": "555-0203", "exemption": "b6", "kind": "phone"}
+  ],
+  "overflag_ok": [
+    {"doc": "email-001.txt", "text": "dana.whitfield@agency.example.gov"},
+    {"doc": "memo-002.txt", "text": "lee.ortiz@agency.example.gov"},
+    {"doc": "email-003.txt", "text": "555-0170"}
+  ],
+  "responsiveness": {
+    "email-001.txt": true,
+    "memo-002.txt": true,
+    "email-003.txt": false,
+    "letter-004.txt": true,
+    "note-005.txt": "escalate"
+  },
+  "contextual_exemptions": [
+    {"doc": "email-001.txt", "exemption": "b5", "about": "pre-decisional deliberative note"},
+    {"doc": "memo-002.txt", "exemption": "b7E", "about": "drone surveillance technique"},
+    {"doc": "letter-004.txt", "exemption": "b5", "about": "attorney-client legal assessment"}
+  ]
+}

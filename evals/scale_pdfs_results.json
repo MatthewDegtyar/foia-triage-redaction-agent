@@ -1,0 +1,21 @@
+{
+  "profile": "uscourts",
+  "docs": 100,
+  "errors": 0,
+  "seconds": 1.9,
+  "docs_with_findings": 11,
+  "total_findings": 17,
+  "types": {
+    "court_judgment": 99,
+    "report": 1
+  },
+  "by_pii_type": {
+    "street_address": 3,
+    "email": 8,
+    "inmate_no": 2,
+    "phone": 4
+  },
+  "by_exemption": {
+    "b6": 17
+  }
+}

@@ -1,0 +1,45 @@
+# Terrain profile: ECHR court-record anonymization (the Text Anonymization Benchmark
+# terrain). Demonstrates the generalist stance — the SAME pipeline, detectors API, and
+# orchestrator run here with NO code change; only this file differs from foia_federal.yaml.
+#
+# Select with: FOIA_PROFILE=echr_anonymization
+
+jurisdiction: "ECHR court-record anonymization (TAB terrain)"
+
+# Gold set + targets the promotion gate (evals/promote.py) checks before this profile can
+# ship to prod. For a brand-new document/redaction class the client supplies a labeled
+# sample here; without it, the gate cannot auto-promote (fails closed).
+eval:
+  gold: evals/ground_truth_tab.json
+  docs: data_tab/docs
+  sample: 200
+  recall_target: 0.40        # deterministic-layer recall the new class must clear
+
+# Here "exemptions" are anonymization identifier classes rather than FOIA statute codes.
+exemptions:
+  direct_id: { basis: "Direct identifier — names and case/application numbers that name the data subject" }
+  quasi_id:  { basis: "Quasi-identifier — dates, locations, demographics that re-identify in combination" }
+
+# Both classes are contextual judgment the model may propose; the regex layer handles the
+# patternable subset deterministically (below).
+llm_proposable: ["direct_id", "quasi_id"]
+
+escalation_threshold: 0.65
+
+# Deterministic layer RETARGETED to this terrain: the regex-able court identifiers
+# (application/case numbers) and the high-volume quasi-identifier dates. Tuned to
+# over-catch (e.g. bare years) by design — the officer prunes.
+detectors:
+  - { name: app_number, pattern: '\b\d{4,5}/\d{2}\b', exemption: direct_id, confidence: 0.95 }
+  - { name: case_no,    pattern: '\b[Nn]o\.?\s*\d{3,6}/\d{2}\b', exemption: direct_id, confidence: 0.90 }
+  - { name: full_date,  pattern: '\b\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b', exemption: quasi_id, confidence: 0.80 }
+  - { name: month_year, pattern: '\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}\b', exemption: quasi_id, confidence: 0.70 }
+  - { name: year,       pattern: '\b(?:18|19|20)\d{2}\b', exemption: quasi_id, confidence: 0.50 }
+
+# Scoped specialists RETARGETED to anonymization: names and identifying narrative are the
+# model's job — a regex cannot reliably catch personal names in free text.
+specialists:
+  - { name: identity, exemption: direct_id,
+      instruction: "Withhold the names of natural persons (applicants, victims, relatives, witnesses) and any direct identifier that names the protected individual." }
+  - { name: quasi, exemption: quasi_id,
+      instruction: "Withhold quasi-identifiers that could re-identify the protected person in combination: specific home/work locations, employer, distinctive demographic details, and other unique personal circumstances." }

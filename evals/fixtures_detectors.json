@@ -1,0 +1,36 @@
+{
+  "_comment": "Controlled labeled fixture for the deterministic detector layer. POSITIVES assert a detector fires on a known identifier (recall). NEGATIVES are real court-text tokens that must NOT fire (precision) — docket/case numbers, statute cites, ECF refs, bare dates, money. Several negatives are the exact false-positive traps DD-015/DD-016 fixed; they double as regression guards.",
+  "positives": [
+    {"type": "ssn",             "text": "His SSN is 123-45-6789 on file.",                      "expect": "123-45-6789"},
+    {"type": "ssn_nodash",      "text": "ID number 123456789 was provided.",                    "expect": "123456789"},
+    {"type": "ein",             "text": "Employer EIN 12-3456789 listed on the filing.",        "expect": "12-3456789"},
+    {"type": "email",           "text": "Reach the party at jane.doe@example.com soon.",        "expect": "jane.doe@example.com"},
+    {"type": "phone",           "text": "Call the applicant at 512-555-0143 anytime.",          "expect": "512-555-0143"},
+    {"type": "dob",             "text": "DOB: 04/17/1979 per the intake form.",                 "expect": "04/17/1979"},
+    {"type": "street_address",  "text": "Residence at 4821 Limestone Ridge Road, Cedar Park.",  "expect": "4821 Limestone Ridge Road"},
+    {"type": "inmate_no",       "text": "Reg. No. 30562-004, Estill FCI.",                      "expect": "30562-004"},
+    {"type": "inmate_no",       "text": "Defendant DC#162841 is held pending transfer.",        "expect": "DC#162841"},
+    {"type": "passport",        "text": "Passport No.: X12345678 was attached as an exhibit.",  "expect": "X12345678"},
+    {"type": "drivers_license", "text": "Driver's License No. D1234567 in the record.",         "expect": "D1234567"},
+    {"type": "alien_reg",       "text": "Alien Registration No. A123456789 noted by ICE.",      "expect": "A123456789"},
+    {"type": "credit_card",     "text": "Charged card 4111 1111 1111 1111 for the fee.",        "expect": "4111 1111 1111 1111"},
+    {"type": "ip_address",      "text": "Logged in from 192.168.10.205 that night.",            "expect": "192.168.10.205"}
+  ],
+  "negatives": [
+    "Case No. 16-cv-61177-BLOOM is before the Court.",
+    "THIS CAUSE is governed by 28 U.S.C. § 2254 for a Writ of Habeas Corpus.",
+    "in violation of 18 U.S.C. § 2339B(a)(1) (Count 5);",
+    "Motion, ECF No. [21] (\"Motion\"), filed on May 9, 2022.",
+    "The Criminal Judgment was entered on June 12, 2015. Cr. ECF No. [301].",
+    "On January 16, 2015, Qazi was charged by Superseding Indictment.",
+    "the court sentenced Qazi to a total sentence of 420 months' imprisonment,",
+    "a 60-month term of imprisonment as to Count 6, all to run consecutively.",
+    "Final Judgment ... for damages in the amount of $87,418.43. ECF No. 72.",
+    "Miller-El v. Cockrell, 537 U.S. 322, 326 (2003);",
+    "Entered on FLSD Docket 03/27/2023 Page 1 of 2",
+    "INTERNAL REVIEW — parcel ID 5829-114-002, permit CP-SOLAR-2231.",
+    "issued on February 15, 2023, recommending the Court dismiss the petition.",
+    "See S.D. Fla. L.R. 7.1(c); see also 28 U.S.C.A. § 636(b).",
+    "Throughput for Q1 was 412 permits in 2023."
+  ]
+}

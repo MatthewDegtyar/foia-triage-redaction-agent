@@ -1,0 +1,2 @@
+# Judicial Conference privacy policy (record release)
+Personal identifiers of private parties are withheld; the public docket is released. Withhold: pro se litigants', defendants', victims', witnesses', and minors' personal identifiers; cooperating-witness and informant identities and locating details. Release: the names of judges, magistrate judges, clerks, and counsel of record acting officially; case numbers; docket numbers; and the official .gov / chambers contacts of court staff. The distinction is ROLE, not surface form.

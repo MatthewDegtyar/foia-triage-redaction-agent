@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Records Review Console</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <h1>Records Review Console</h1>
+  <span class="ref" id="ref">— no package loaded —</span>
+  <span class="spacer"></span>
+  <span class="badge" id="modelBadge">model: ?</span>
+  <button onclick="openGuidelines()">Guidelines</button>
+  <button onclick="openCorpus()">Corpus</button>
+  <button onclick="openLearned()">Learned</button>
+  <button onclick="showAudit()">Audit log</button>
+  <button class="primary" id="produceBtn" onclick="produce()">Produce package</button>
+</header>
+
+<main>
+  <section class="board-wrap">
+    <div class="intake-bar">
+      <div class="intake-req">
+        <p class="eyebrow">Incoming records — <span id="reqRef"></span></p>
+        <div class="intake-types" id="typeChips"></div>
+      </div>
+      <div class="intake-actions">
+        <label class="auto-toggle"><input type="checkbox" id="autoIntake" onchange="toggleAuto()"> Auto-intake</label>
+        <button class="primary" id="intakeBtn" onclick="intakeBatch()">Intake documents</button>
+      </div>
+    </div>
+    <div id="progress" style="display:none"></div>
+    <div id="board"></div>
+  </section>
+</main>
+
+<dialog id="docModal">
+  <div class="modal-h"><span id="m-title"></span><span class="spacer"></span>
+    <button onclick="closeModal()">Close</button></div>
+  <div class="modal-b">
+    <div class="modal-doc">
+      <div id="m-banner"></div>
+      <div class="doctext" id="m-text"></div>
+    </div>
+    <aside class="modal-side"><div id="m-detail"></div></aside>
+  </div>
+  <div class="modal-f">
+    <span class="hint" id="m-hint">Click &amp; drag over any text in the document to withhold it.</span>
+    <span class="spacer"></span>
+    <button class="acc" id="m-resp" onclick="markResp(true)">Mark as responsive</button>
+    <button class="rej" id="m-nonresp" onclick="markResp(false)">Mark as non-responsive</button>
+  </div>
+</dialog>
+
+<dialog id="refDlg">
+  <div class="modal-h"><span id="refTitle"></span><span class="spacer"></span>
+    <button onclick="refDlg.close()" aria-label="Close">×</button></div>
+  <div class="ex-body" id="refBody"></div>
+</dialog>
+
+<dialog id="auditDlg"><div class="dlg-h">Audit log — administrative record</div>
+  <div class="dlg-b"><pre id="auditBody"></pre></div>
+  <div style="padding:10px 16px;text-align:right"><button onclick="auditDlg.close()">Close</button></div>
+</dialog>
+<div class="toast" id="toast"></div>
+
+<script src="/app.js"></script>
+</body>
+</html>

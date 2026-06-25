@@ -1,0 +1,28 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Runtime artifacts — regenerated on boot / from the live feedback stream
+context/context.db
+memory/*.db
+health/*.jsonl
+
+# OS / editor
+.DS_Store
+
+# Dev screenshots (not part of the project)
+console/screenshot*.png
+
+# Bulk / third-party corpora — reproducible, not needed to run the demo:
+#   data/pdfs_scale       — 100 govinfo USCOURTS PDFs for the scale run (evals/scale_pdfs.py);
+#                           the output it produced is kept in evals/scale_pdfs_results.json
+#   tab_raw / data_tab    — Text Anonymization Benchmark (third-party ECHR corpus + ground truth);
+#                           built by evals/build_tab.py
+#   data_scale            — synthetic 1,000-doc set for evals/scale.py
+data/pdfs_scale/
+tab_raw/
+data_tab/
+data_scale/
+evals/ground_truth_tab.json

@@ -1,0 +1,75 @@
+{
+  "profiles": {
+    "echr_anonymization": {
+      "active": 1,
+      "versions": [
+        1,
+        2
+      ]
+    }
+  },
+  "log": [
+    {
+      "ts": "2026-06-18T05:38:59Z",
+      "profile": "echr_anonymization",
+      "action": "promote",
+      "from": null,
+      "version": 1,
+      "decision": "SHIP",
+      "actor": "records.officer",
+      "scorecard": {
+        "regression (federal PII recall)": {
+          "pass": true,
+          "detail": "100%, 0 miss(es)"
+        },
+        "new-type recall": {
+          "pass": true,
+          "detail": "47.4% vs target 40% (5859/12354)"
+        },
+        "throughput/robustness": {
+          "pass": true,
+          "detail": "200 ok, 0 errors"
+        },
+        "release gate fail-closed": {
+          "pass": true,
+          "detail": "escalated unreleasable; unreviewed redaction blocks"
+        }
+      }
+    },
+    {
+      "ts": "2026-06-18T05:39:34Z",
+      "profile": "echr_anonymization",
+      "action": "promote",
+      "from": 1,
+      "version": 2,
+      "decision": "SHIP",
+      "actor": "records.officer",
+      "scorecard": {
+        "regression (federal PII recall)": {
+          "pass": true,
+          "detail": "100%, 0 miss(es)"
+        },
+        "new-type recall": {
+          "pass": true,
+          "detail": "47.4% vs target 40% (5859/12354)"
+        },
+        "throughput/robustness": {
+          "pass": true,
+          "detail": "200 ok, 0 errors"
+        },
+        "release gate fail-closed": {
+          "pass": true,
+          "detail": "escalated unreleasable; unreviewed redaction blocks"
+        }
+      }
+    },
+    {
+      "ts": "2026-06-18T05:39:35Z",
+      "profile": "echr_anonymization",
+      "action": "rollback",
+      "from": 2,
+      "version": 1,
+      "actor": "ops.oncall"
+    }
+  ]
+}

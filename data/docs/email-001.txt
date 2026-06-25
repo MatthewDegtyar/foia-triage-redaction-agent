@@ -1,0 +1,16 @@
+From: Dana Whitfield <dana.whitfield@agency.example.gov>
+To: Permit Review Team
+Date: 2026-02-11
+Subject: Cedar Park solar permit CP-SOLAR-2231 — applicant contact
+
+Team,
+
+Logging the applicant contact for the Cedar Park solar permit. Primary contact is
+Marcus Reedy, SSN 123-45-6789, cell 555-0142, email marcus.reedy@example.com,
+residence 4821 Limestone Ridge Road, Cedar Park. DOB 04/17/1979.
+
+Pre-decisional note (NOT for release): staff are leaning toward denial on setback
+grounds, but we have not briefed the Director yet and the recommendation may change
+after the traffic study. Let's keep this internal until the Feb 28 review.
+
+Dana

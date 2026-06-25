@@ -1,0 +1,25 @@
+# FOIA exemption schedule. Swap this file per jurisdiction (state public-records
+# acts like the Texas PIA have a different schedule) — the agent loads whatever
+# policy the deploying agency uses. Deployment-aware by design.
+
+jurisdiction: "U.S. Federal FOIA (5 U.S.C. § 552)"
+
+exemptions:
+  b1:  { basis: "5 U.S.C. § 552(b)(1) — classified national defense / foreign policy" }
+  b2:  { basis: "5 U.S.C. § 552(b)(2) — internal personnel rules and practices" }
+  b3:  { basis: "5 U.S.C. § 552(b)(3) — exempted by another statute" }
+  b4:  { basis: "5 U.S.C. § 552(b)(4) — trade secrets / confidential commercial" }
+  b5:  { basis: "5 U.S.C. § 552(b)(5) — deliberative process / attorney-client / work product" }
+  b6:  { basis: "5 U.S.C. § 552(b)(6) — personal privacy (PII)" }
+  b7C: { basis: "5 U.S.C. § 552(b)(7)(C) — law-enforcement records, personal privacy" }
+  b7D: { basis: "5 U.S.C. § 552(b)(7)(D) — identity of a confidential source" }
+  b7E: { basis: "5 U.S.C. § 552(b)(7)(E) — law-enforcement techniques and procedures" }
+  b7F: { basis: "5 U.S.C. § 552(b)(7)(F) — endanger the life or physical safety of an individual" }
+
+# Which exemptions the LLM is allowed to PROPOSE (contextual judgment calls).
+# Deterministic PII (b6/b4) come from the regex detectors, not the model.
+llm_proposable: ["b5", "b7C", "b7E"]
+
+# Confidence below this -> the agent does NOT decide; it escalates to a human.
+# Calibrated refusal: in this domain, guessing is the failure.
+escalation_threshold: 0.65

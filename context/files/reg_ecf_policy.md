@@ -1,0 +1,2 @@
+# Judicial Conference policy on electronic case files (remote public access)
+Because filings are remotely accessible on PACER/CM-ECF, the privacy exposure of an identifier is national, not local to a courthouse. Treat home addresses, personal phone numbers, financial-account and government-ID numbers of private parties as high-sensitivity; the public-record items (docket/case numbers, official court contacts) remain releasable.

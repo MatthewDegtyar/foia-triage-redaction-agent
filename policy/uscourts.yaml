@@ -1,0 +1,92 @@
+# Terrain profile: U.S. federal court records (govinfo USCOURTS corpus).
+#
+# Same engine, different terrain (DD-004). Swapping THIS file in is how the generalist
+# agent retargets from agency FOIA documents to court records — no code change. The
+# detectors here are tuned for the court domain: filing dates are everywhere, so a bare
+# date is NOT a DOB; "Court" is a docket word, not a street suffix. The contextual call
+# that matters most in court records — telling a PRIVATE litigant apart from a judge,
+# clerk, or attorney of record — is left to the b6 specialist, where it belongs.
+#
+# Redaction posture follows the Judicial Conference privacy policy / Fed. R. Civ. P. 5.2:
+# personal identifiers of private parties are withheld; the public docket (case numbers,
+# the names of judges and counsel acting officially) is released.
+
+jurisdiction: "U.S. Federal Courts — record release (Fed. R. Civ. P. 5.2 / Judicial Conference privacy policy)"
+
+exemptions:
+  b6:  { basis: "Personal privacy — identifiers of a PRIVATE individual (Fed. R. Civ. P. 5.2; Judicial Conference privacy policy)" }
+  b4:  { basis: "Confidential commercial or financial information" }
+  b5:  { basis: "Draft / non-public deliberative material not part of the public record" }
+  b7C: { basis: "Law-enforcement records — unwarranted invasion of personal privacy (5 U.S.C. § 552(b)(7)(C))" }
+  b7D: { basis: "Identity of a confidential source or information that would reveal one (5 U.S.C. § 552(b)(7)(D))" }
+  b7E: { basis: "Non-public investigative technique or procedure (sealed law-enforcement material; 5 U.S.C. § 552(b)(7)(E))" }
+  b7F: { basis: "Information whose release could endanger the life or physical safety of an individual (5 U.S.C. § 552(b)(7)(F))" }
+
+# Deterministic, format-based PII — the safety-critical class, tuned for court text.
+detectors:
+  - { name: ssn,            pattern: '\b\d{3}-\d{2}-\d{4}\b',                                                  exemption: b6, confidence: 0.99 }
+  - { name: ssn_nodash,     pattern: '\b(?<!\d)\d{9}(?!\d)\b',                                                 exemption: b6, confidence: 0.55 }
+  - { name: financial_acct, pattern: '\b(?:acct|account|a/c)\s*#?\s*\d{5,}\b',                                 exemption: b4, confidence: 0.85 }
+  - { name: email,          pattern: '\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b',                     exemption: b6, confidence: 0.55 }
+  - { name: phone,          pattern: '(?<!\w)(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b',           exemption: b6, confidence: 0.80 }
+  # DOB only with a contextual cue — a bare MM/DD/YYYY in a court order is almost always a filing date.
+  - { name: dob,            pattern: '(?i)(?:date of birth|d\.?o\.?b\.?|born(?:\s+on)?)\s*[:\s]\s*\(?(?:0?[1-9]|1[0-2])[/-](?:0?[1-9]|[12]\d|3[01])[/-](?:19|20)\d{2}', exemption: b6, confidence: 0.9 }
+  # Street suffix must be a REAL suffix — "Court" excluded (it is a docket word here).
+  - { name: street_address, pattern: '\b\d{1,6}\s+(?:[A-Z][a-z]+\.?\s){1,3}(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Drive|Dr|Lane|Ln|Way|Place|Pl|Terrace|Ter|Circle|Cir|Highway|Hwy)\b', exemption: b6, confidence: 0.75 }
+  - { name: inmate_no,      pattern: '\b(?:DC#|Inmate(?:\s+No\.?)?|Reg(?:ister)?\.?\s*No\.?)\s*#?\s*[A-Z]?\d{5,}\b', exemption: b6, confidence: 0.8 }
+  # Taxpayer IDs (FRCP 5.2 names these explicitly) — EIN format XX-XXXXXXX; ITIN shares the SSN shape (caught above).
+  - { name: ein,            pattern: '\b\d{2}-\d{7}\b',                                                          exemption: b6, confidence: 0.55 }
+  # Government IDs — passport / driver's license require a contextual cue (raw alphanumerics over-catch);
+  # the alien-registration "A-number" is specific enough to stand alone.
+  - { name: passport,       pattern: "(?i)passport\\s*(?:no\\.?|#|number)?\\s*[:#]?\\s*([A-Z]?\\d{8})\\b",        exemption: b6, confidence: 0.7 }
+  - { name: drivers_license,pattern: "(?i)(?:driver'?s?\\s*licen[sc]e|\\bDL)\\s*(?:no\\.?|#|number)?\\s*[:#]?\\s*([A-Z0-9]{6,12})\\b", exemption: b6, confidence: 0.6 }
+  - { name: alien_reg,      pattern: '\bA[-#\s]?\d{8,9}\b',                                                      exemption: b6, confidence: 0.7 }
+  # Financial / online identifiers — brand-prefixed card (precise, avoids docket-number FPs) + IPv4.
+  - { name: credit_card,    pattern: '\b(?:4\d{3}|5[1-5]\d{2}|3[47]\d{2}|6011)[ -]?\d{4}[ -]?\d{4}[ -]?\d{2,4}\b', exemption: b6, confidence: 0.8 }
+  - { name: ip_address,     pattern: '\b(?:\d{1,3}\.){3}\d{1,3}\b',                                              exemption: b6, confidence: 0.6 }
+
+# Contextual judgment the model is allowed to PROPOSE (never the deterministic b6 PII above).
+llm_proposable: ["b6", "b5", "b7C", "b7D", "b7E", "b7F"]
+
+specialists:
+  - name: privacy
+    exemption: b6
+    instruction: >
+      Withhold the names and personal identifiers of PRIVATE individuals appearing in this
+      court record — pro se litigants, criminal defendants, prisoners, minors (use initials),
+      victims, witnesses, jurors, and named third parties — together with their home
+      addresses, personal phone numbers, and inmate/register numbers. Do NOT withhold the
+      names of judges, magistrate judges, court clerks, or attorneys of record acting in
+      their official capacity; do NOT withhold case numbers, docket numbers, or the official
+      .gov / chambers email addresses of court staff. The distinction is ROLE, not surface
+      form — the same name shape can be a withheld party or a released official.
+  - name: deliberative
+    exemption: b5
+    instruction: >
+      Withhold only material that is NOT part of the public record — draft language quoted
+      from a sealed filing, or in-chambers deliberative notes. A court's final reasoning in
+      a public order is released, not withheld.
+  - name: sealed
+    exemption: b7E
+    instruction: >
+      Withhold descriptions of non-public investigative techniques or material the order
+      itself identifies as filed UNDER SEAL or reviewed IN CAMERA.
+  # Law-enforcement-sensitive specialists, scoped so they do NOT duplicate the b6 privacy call:
+  # b7C (LE personal privacy) is left for manual classification to avoid double-flagging names.
+  - name: confidential_source
+    exemption: b7D
+    instruction: >
+      Withhold anything that would reveal the identity of a CONFIDENTIAL SOURCE or informant —
+      a name, a code/CI number, or distinguishing facts the record ties to a cooperating
+      witness or tipster. Do NOT withhold the names of testifying witnesses already public on
+      the docket, or of agents/officers acting officially.
+  - name: safety
+    exemption: b7F
+    instruction: >
+      Withhold locating details whose disclosure could ENDANGER the physical safety of an
+      individual — the home address or whereabouts of a cooperating witness, victim, juror, or
+      a threatened official. This is about safety-relevant location, not ordinary privacy
+      (which is the b6 call). Do NOT withhold a courthouse address or an official office.
+
+# Below this confidence the agent does NOT decide; it escalates to a human (calibrated refusal).
+escalation_threshold: 0.65

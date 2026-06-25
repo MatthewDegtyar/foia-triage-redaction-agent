@@ -1,0 +1,2 @@
+# Privacy Act of 1974 (5 U.S.C. § 552a)
+Governs records about individuals kept in a federal 'system of records' retrievable by a personal identifier. Disclosure of another person's record without consent is generally barred; in FOIA this reinforces b6 / b7(C). Withhold third-party personal records (SSNs, addresses, dates of birth, account and case-file identifiers) absent consent or a clear public interest that outweighs the privacy intrusion.
