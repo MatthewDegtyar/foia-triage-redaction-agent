@@ -9,6 +9,12 @@ It runs on **real, born-digital U.S. federal court records** (from GPO's govinfo
 key** (the model transport is your logged-in **Claude Code** CLI), and boots already-populated so
 you can see the whole workflow in one screen.
 
+![The review console — the whole workflow in four lanes](docs/screenshots/board.png)
+
+<sub>The officer's desk, mid-shift: untouched intake on the left, agent-triaged documents awaiting
+review, and cleared / withheld on the right. (The "model: fail-safe" badge is the calibrated-refusal
+default — it reads **model: live** when Claude Code is logged in.)</sub>
+
 ---
 
 ## Why this is useful
@@ -61,6 +67,13 @@ Click any card to open a full-screen review modal: the document text with propos
 flashes every redaction to black and applies them; *Produce package* runs the fail-closed release
 gate.
 
+![The review modal — a redaction with its exemption, basis, detector, and confidence](docs/screenshots/review.png)
+
+<sub>Reviewing a habeas order: the agent flagged the private petitioner's name (hover shows the
+exemption type), while leaving the magistrate judge and counsel of record released. The right panel
+carries the exemption, statutory basis, the detector that found it, and a confidence — reclassify,
+delete, or mark the document below.</sub>
+
 Three panels expose the agent's reasoning aids — and they're the *same* content the agent reads at
 runtime:
 
@@ -71,6 +84,10 @@ runtime:
   Privacy Act).
 - **Learned** — the officer corrections the agent has tracked and now RAGs against.
 - **Audit log** — the full administrative record of every action.
+
+| Learned — corrections the agent RAGs against | Corpus — the regulations it references |
+| :---: | :---: |
+| ![Learned panel](docs/screenshots/learned.png) | ![Corpus panel](docs/screenshots/corpus.png) |
 
 ---
 
