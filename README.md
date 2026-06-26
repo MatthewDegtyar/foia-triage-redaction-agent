@@ -85,9 +85,15 @@ runtime:
 - **Learned** — the officer corrections the agent has tracked and now RAGs against.
 - **Audit log** — the full administrative record of every action.
 
-| Learned — corrections the agent RAGs against | Corpus — the regulations it references |
-| :---: | :---: |
-| ![Learned panel](docs/screenshots/learned.png) | ![Corpus panel](docs/screenshots/corpus.png) |
+![Learned — corrections the agent RAGs against](docs/screenshots/learned.png)
+
+<sub>**Learned** — every officer correction (removed / added / reclassified), retrieved at runtime
+when a new document resembles one.</sub>
+
+![Corpus — the regulations the agent references](docs/screenshots/corpus.png)
+
+<sub>**Corpus** — the authoritative regulations for the terrain, injected as reference law at
+runtime.</sub>
 
 ---
 
